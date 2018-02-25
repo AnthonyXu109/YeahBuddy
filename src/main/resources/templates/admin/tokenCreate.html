@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="zh-CN" xmlns="http://www.w3.org/1999/html">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title data-th-text="${readOnly} ? #{admin.profile.view_title} : #{admin.profile.title}">新建导师评审链接</title>
+    <link rel="stylesheet" href="../../webjars/bootstrap/dist/css/bootstrap.min.css"
+          data-th-href="@{/webjars/bootstrap/dist/css/bootstrap.min.css}">
+    <link rel="stylesheet" href="../../webjars/bootstrap-material-design/dist/bootstrap-material-design.min.css"
+          data-th-href="@{/webjars/bootstrap-material-design/dist/bootstrap-material-design.min.css}">
+    <link rel="stylesheet" href="../../static/css/bg.css" data-th-href="@{/static/css/bg.css}">
+    <style type="text/css">
+        .form-control:focus {
+            color: black;
+        }
+
+        #submit {
+            background: rgba(0, 0, 0, .12);
+        }
+
+        #submit:hover {
+            background: rgba(0, 0, 128, .22);
+        }
+
+        .alert-dismissible .close {
+            position: relative;
+            right: -1.25rem;
+            padding: .75rem 1.25rem;
+            color: inherit;
+        }
+
+        .alert strong {
+            margin-right: 1rem;
+        }
+    </style>
+
+</head>
+<body>
+<div id="bg"></div>
+<nav class="navbar navbar-toggleable-md fixed-top">
+    <div class="container">
+        <div class="navbar-header">
+            <a class="navbar-brand" href="#">
+                <img src="../../static/image/favicon.svg"
+                     data-th-src="@{/static/image/favicon.svg}"
+                     width="30" height="30" class="d-inline-block align-top">项目管理系统
+            </a>
+        </div>
+    </div>
+</nav>
+
+<div class="container-fluid pt-md-3">
+    <div class="row">
+        <div class="col-md-3 offset-md-1">
+            <div class="list-group pt-md-0">
+                <a href="#" class="list-group-item active">
+                    我的菜单
+                </a>
+                <a href="#" class="list-group-item" style="background-color: rgba(200,230,201,0.41)">基本信息</a>
+                <a href="profile.html" data-th-href="@{'/admin/' + ${adminId}}" class="list-group-item">个人信息</a>
+                <a href="password.html" data-th-href="@{'/admin/' + ${adminId} + '/password'}" class="list-group-item">密码修改</a>
+                <a href="#" class="list-group-item" style="background-color: rgba(200,230,201,0.41)">项目报告任务</a>
+                <a href="taskCreate.html" data-th-href="@{/task/create}" class="list-group-item">新建任务</a>
+                <a href="taskHistory.html" data-th-href="@{/task/history}" class="list-group-item">历史任务</a>
+                <a href="#" class="list-group-item" style="background-color: rgba(200,230,201,0.41)">导师评审链接</a>
+                <a href="tokenCurrent.html" data-th-href="@{/token/current}" class="list-group-item">新建链接</a>
+                <a href="tokenHistory.html" data-th-href="@{/token/history}" class="list-group-item">历史链接</a>
+                <a href="#" class="list-group-item" style="background-color: rgba(200,230,201,0.41)">团队项目报告</a>
+                <a href="results.html" data-th-href="@{/result/current}" class="list-group-item">查看与评审</a>
+                <a href="reportHistory.html" data-th-href="@{/result/history}" class="list-group-item">历史项目报告</a>
+                <a href="#" class="list-group-item" style="background-color: rgba(200,230,201,0.41)">用户管理</a>
+                <a href="tutorAdmin.html" data-th-href="@{/admin/tutor}" class="list-group-item">导师管理</a>
+                <a href="teamAdmin.html" data-th-href="@{/admin/team}" class="list-group-item">团队管理</a>
+            </div>
+        </div>
+        <div class="col-md-7 pl-md-0">
+            <h2 class="text-center pt-3 pb-3">
+                新建导师评审链接
+            </h2>
+            <form data-th-action="${formAction}" method="POST">
+                <div class="row pb-3" style="padding-right: 15px;">
+                    <div class="form-group col-md-6">
+                        <div class="row">
+                            <label class="col-3 col-form-label" data-th-text="#{stage}" for="stage">阶段:</label>
+                            <input class="col-9 form-control" id="stage" readonly style="background: none"
+                                   data-th-value="${stage.title}"/>
+                        </div>
+                    </div>
+                    <div class="form-group col-md-6">
+                        <div class="row">
+                            <label class="col-3 col-form-label" for="end" data-th-text="#{review.end}">评审结束时间</label>
+                            <input class="col-9 form-control" type="datetime-local" name="end" id="end" required
+                                   data-th-value="${stage.end}"/>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-6">
+                        <h4>选择导师</h4>
+                        <div style="max-height: 10rem;overflow: auto;">
+                            <div data-th-each="tutor:${tutors}">
+                                <input type="checkbox" id="checkbox-tutor" data-th-id="'checkbox-tutor' + ${tutor.id}"
+                                       name="tutorChosen" data-th-value="${tutor.id}" value="0"/>
+                                <label for="checkbox-tutor" data-th-for="'checkbox-tutor' + ${tutor.id}"
+                                       data-th-text="${tutor.displayName}">tutor Luo</label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-6">
+                        <h4>选择团队</h4>
+                        <div style="max-height: 10rem;overflow: auto;">
+                            <div data-th-each="team:${teams}" style="max-height: 100rem">
+                                <input type="checkbox" id="checkbox-team" data-th-id="'checkbox-team' + ${team.id}"
+                                       name="teamChosen" data-th-value="${team.id}" value="0"/>
+                                <label for="checkbox-team" data-th-for="'checkbox-team' + ${team.id}"
+                                       data-th-text="${team.displayName}">team Yeah</label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <button class="btn btn-primary btn-block" data-th-text="#{submit}" id="submit">提交</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <footer class="row clearfix" data-th-replace="~{footer::normal}">
+        <div class="col-md-10 offset-md-1 column">
+            <ul class="breadcrumb">
+                <li class="breadcrumb-item">
+                    <a href="#" data-th-text="#{footer.about}">关于我们</a>
+                </li>
+                <li class="breadcrumb-item">
+                    <a href="#" data-th-text="#{footer.feedback}">意见反馈</a>
+                </li>
+                <li class="breadcrumb-item">
+                    <a href="#" data-th-text="#{footer.help}">帮助中心</a>
+                </li>
+                <li class="breadcrumb-item">
+                    <a href="#" data-th-text="#{footer.us}">联系我们</a>
+                </li>
+                <li class="breadcrumb-item active">
+                    All rights reserved
+                </li>
+            </ul>
+        </div>
+    </footer>
+</div>
+<script src="../../webjars/jquery/dist/jquery.min.js" data-th-src="@{/webjars/jquery/dist/jquery.min.js}"></script>
+<script src="../../webjars/tether/dist/js/tether.min.js"
+        data-th-src="@{/webjars/tether/dist/js/tether.min.js}"></script>
+<script src="../../webjars/bootstrap/dist/js/bootstrap.min.js"
+        data-th-src="@{/webjars/bootstrap/dist/js/bootstrap.min.js}"></script>
+</body>
+</html>

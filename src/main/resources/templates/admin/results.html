@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title data-th-text="${readOnly} ? #{admin.profile.view_title} : #{admin.profile.title}">项目报告记录</title>
+    <link rel="stylesheet" href="../../webjars/bootstrap/dist/css/bootstrap.min.css"
+          data-th-href="@{/webjars/bootstrap/dist/css/bootstrap.min.css}">
+    <link rel="stylesheet" href="../../webjars/bootstrap-material-design/dist/bootstrap-material-design.min.css"
+          data-th-href="@{/webjars/bootstrap-material-design/dist/bootstrap-material-design.min.css}">
+    <link rel="stylesheet" href="../../static/css/bg.css" data-th-href="@{/static/css/bg.css}">
+    <style type="text/css">
+        #main-table {
+            display: table;
+        }
+
+        @media screen and (max-width: 768px) {
+            #main-table {
+                display: inline-block;
+            }
+        }
+
+        .table thead th, .table tbody tr td {
+            min-width: 4rem;
+        }
+    </style>
+</head>
+<body>
+<div id="bg"></div>
+<nav class="navbar navbar-toggleable-md fixed-top">
+    <div class="container">
+        <div class="navbar-header">
+            <a class="navbar-brand" href="#">
+                <img src="../../static/image/favicon.svg"
+                     data-th-src="@{/static/image/favicon.svg}"
+                     width="30" height="30" class="d-inline-block align-top">项目管理系统
+            </a>
+        </div>
+    </div>
+</nav>
+
+<div class="container-fluid pt-md-3">
+    <div class="row">
+        <div class="col-md-3 offset-md-1">
+            <div class="list-group pt-md-0">
+                <a href="#" class="list-group-item active">
+                    我的菜单
+                </a>
+                <a href="#" class="list-group-item" style="background-color: rgba(200,230,201,0.41)">基本信息</a>
+                <a href="profile.html" data-th-href="@{'/admin/' + ${adminId}}" class="list-group-item">个人信息</a>
+                <a href="password.html" data-th-href="@{'/admin/' + ${adminId} + '/password'}" class="list-group-item">密码修改</a>
+                <a href="#" class="list-group-item" style="background-color: rgba(200,230,201,0.41)">项目报告任务</a>
+                <a href="taskCreate.html" data-th-href="@{/task/create}" class="list-group-item">新建任务</a>
+                <a href="taskHistory.html" data-th-href="@{/task/history}" class="list-group-item">历史任务</a>
+                <a href="#" class="list-group-item" style="background-color: rgba(200,230,201,0.41)">导师评审链接</a>
+                <a href="tokenCurrent.html" data-th-href="@{/token/current}" class="list-group-item">新建链接</a>
+                <a href="tokenHistory.html" data-th-href="@{/token/history}" class="list-group-item">历史链接</a>
+                <a href="#" class="list-group-item" style="background-color: rgba(200,230,201,0.41)">团队项目报告</a>
+                <a href="results.html" data-th-href="@{/result/current}" class="list-group-item">查看与评审</a>
+                <a href="reportHistory.html" data-th-href="@{/result/history}" class="list-group-item">历史项目报告</a>
+                <a href="#" class="list-group-item" style="background-color: rgba(200,230,201,0.41)">用户管理</a>
+                <a href="tutorAdmin.html" data-th-href="@{/admin/tutor}" class="list-group-item">导师管理</a>
+                <a href="teamAdmin.html" data-th-href="@{/admin/team}" class="list-group-item">团队管理</a>
+            </div>
+        </div>
+        <div class="col-md-7 pl-md-0">
+            <h2 style="text-align: center;">
+                团队项目报告
+            </h2>
+            <table class="table table-responsive table-striped table-hover" id="main-table">
+                <thead>
+                <tr>
+                    <th>项目报告名称</th>
+                    <th>阶段名称</th>
+                    <th>截止时间</th>
+                    <th>已提交报告</th>
+                    <th>导师评审状态</th>
+                    <th>考核结果</th>
+                    <th>综合评审</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr data-th-each="result:${results}">
+                    <td data-th-text="${result.report.title}">2017年度期末报告</td>
+                    <td data-th-text="${result.report.stage.title}">2017年度期末</td>
+                    <td data-th-text="${#dates.format(result.report.stage.end, 'yyyy-MM-dd')}">2017-07-20 00:00</td>
+                    <td data-th-text="${result.submitted} ? #{yes} : #{no}">是</td>
+                    <td data-th-text="${reviewStat[result.id]}">2/3</td>
+                    <td data-th-text="${result.brief}">优秀</td>
+                    <td><a href="../admin/result.html" data-th-href="'/result/' + ${result.id}">综合评审</a></td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <footer class="row clearfix" data-th-replace="~{footer::normal}">
+        <div class="col-md-10 offset-md-1 column">
+            <ul class="breadcrumb">
+                <li class="breadcrumb-item">
+                    <a href="#" data-th-text="#{footer.about}">关于我们</a>
+                </li>
+                <li class="breadcrumb-item">
+                    <a href="#" data-th-text="#{footer.feedback}">意见反馈</a>
+                </li>
+                <li class="breadcrumb-item">
+                    <a href="#" data-th-text="#{footer.help}">帮助中心</a>
+                </li>
+                <li class="breadcrumb-item">
+                    <a href="#" data-th-text="#{footer.us}">联系我们</a>
+                </li>
+                <li class="breadcrumb-item active">
+                    All rights reserved
+                </li>
+            </ul>
+        </div>
+    </footer>
+</div>
+<script src="../../webjars/jquery/dist/jquery.min.js" data-th-src="@{/webjars/jquery/dist/jquery.min.js}"></script>
+<script src="../../webjars/tether/dist/js/tether.min.js"
+        data-th-src="@{/webjars/tether/dist/js/tether.min.js}"></script>
+<script src="../../webjars/bootstrap/dist/js/bootstrap.min.js"
+        data-th-src="@{/webjars/bootstrap/dist/js/bootstrap.min.js}"></script>
+
+</body>
+</html>
